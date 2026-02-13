@@ -3,6 +3,7 @@ package fr.shoqapik.w2w2;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.blay09.mods.waystones.api.WaystoneActivatedEvent;
 import net.blay09.mods.waystones.api.WaystoneUpdateReceivedEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -40,13 +41,28 @@ public class W2w2Mod
 
     @SubscribeEvent
     public void onWaystoneActivated(WaystoneActivatedEvent event){
-        if (!(event.getPlayer()).isLocalPlayer()) {
+        if (!event.getPlayer().level.isClientSide) {
             IWaystone waystone = event.getWaystone();
             WaystoneActivatedPacket packet = new WaystoneActivatedPacket(waystone.getPos(), waystone.getName());
             sendToClient(packet, (ServerPlayer)event.getPlayer());
         }
     }
 
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void onWaystonesUpdate(WaystoneUpdateReceivedEvent event) {
+        Minecraft mc = Minecraft.getInstance();
+
+        if (mc.level == null || mc.player == null || mc.getConnection() == null) return;
+        if (!ModList.get().isLoaded("xaerominimap")) return;
+
+        IWaystone waystone = event.getWaystone();
+        String name = waystone.getName();
+        BlockPos pos = waystone.getPos();
+
+        XaeronCompatibility.addWaypoint(pos, name, waystone);
+    }
     @SubscribeEvent
     public void onItemFishhed(ItemFishedEvent event){
 

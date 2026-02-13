@@ -1,11 +1,13 @@
 package fr.shoqapik.w2w2;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.NetworkEvent;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.function.Supplier;
 
@@ -28,6 +30,7 @@ public class WaystoneActivatedPacket {
 
     private static void handlePacket(WaystoneActivatedPacket msg, Supplier<NetworkEvent.Context> ctx) {
         String name = msg.name;
+
         if(name.isEmpty()){
             name = "Unnamed Waystone";
         }
@@ -37,6 +40,7 @@ public class WaystoneActivatedPacket {
         if (!ModList.get().isLoaded("xaerominimap")){
             return;
         }
+        if(Minecraft.getInstance().getConnection()==null)return;
         XaeronCompatibility.addWaypoint(pos,name);
     }
 

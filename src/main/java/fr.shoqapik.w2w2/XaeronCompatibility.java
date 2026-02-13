@@ -3,6 +3,7 @@ package fr.shoqapik.w2w2;
 import net.blay09.mods.waystones.api.IWaystone;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import org.apache.logging.log4j.LogManager;
 import xaero.common.XaeroMinimapSession;
 import xaero.common.core.IXaeroMinimapClientPlayNetHandler;
 import xaero.common.minimap.waypoints.Waypoint;
@@ -20,7 +21,7 @@ public class XaeronCompatibility {
         WaypointsManager waypointsManager = session.getWaypointsManager();
         Waypoint waypoint = getWaypoint(waypointsManager.getWaypoints().getList(), waystone);
         if(waypoint == null){
-            Waypoint instant = new Waypoint(pos.getX(), pos.getY() + 2, pos.getZ(), name, name.substring(0, 1), (int)(Math.random() * ModSettings.ENCHANT_COLORS.length), 0, false);
+            Waypoint instant = new Waypoint(pos.getX(), pos.getY() + 2, pos.getZ(), name, name.substring(0, 1), (int)(Math.random() * 16), 0, false);
             waypointsManager.getWaypoints().getList().add(instant);
         }else{
             waypoint.setName(name);
@@ -36,12 +37,13 @@ public class XaeronCompatibility {
             error.printStackTrace();
         }
     }
+
     public static void addWaypoint(BlockPos pos, String name){
         IXaeroMinimapClientPlayNetHandler clientLevel = (IXaeroMinimapClientPlayNetHandler) (Minecraft.getInstance().player.connection);
         XaeroMinimapSession session = clientLevel.getXaero_minimapSession();
 
         WaypointsManager waypointsManager = session.getWaypointsManager();
-        Waypoint instant = new Waypoint(pos.getX(), pos.getY() + 2, pos.getZ(), name, name.substring(0, 1), (int)(Math.random() * ModSettings.ENCHANT_COLORS.length), 0, false);
+        Waypoint instant = new Waypoint(pos.getX(), pos.getY() + 2, pos.getZ(), name, name.substring(0, 1), (int)(Math.random() * 16), 0, false);
         waypointsManager.getWaypoints().getList().add(instant);
 
         try {
