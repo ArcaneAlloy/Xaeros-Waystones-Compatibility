@@ -27,7 +27,7 @@ public class W2w2Mod
     private static final String PROTOCOL_VERSION = "1";
 
     public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(MODID, "main"),
+            ResourceLocation.fromNamespaceAndPath(MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
@@ -72,6 +72,4 @@ public class W2w2Mod
     public static <MSG>  void sendToClient(MSG message, ServerPlayer player) {
         INSTANCE.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
-
-
 }

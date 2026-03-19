@@ -5,7 +5,7 @@ plugins {
     id 'org.spongepowered.mixin' version '0.7.+'
 }
 
-version = '1.0.2'
+version = '1.0.3'
 group = 'fr.shoqapik.w2w2' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'w2w2'
 
@@ -124,12 +124,12 @@ repositories {
 
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.0.8'
+    minecraft 'net.minecraftforge:forge:1.19.2-43.5.2'
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    implementation fg.deobf('curse.maven:waystones-245755:4635420')
-    implementation fg.deobf('curse.maven:xaerosminimap-263420:4593181')
-    implementation fg.deobf("curse.maven:balm-531761:4442591")
-    implementation fg.deobf("curse.maven:xaeros-world-map-317780:6778086")
+    implementation fg.deobf("curse.maven:waystones-245755:4943265")
+    implementation fg.deobf("curse.maven:xaeros-minimap-263420:7598584")
+    implementation fg.deobf("curse.maven:balm-531761:4751735")
+    implementation fg.deobf("curse.maven:xaeros-world-map-317780:7598464")
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
 }
 
