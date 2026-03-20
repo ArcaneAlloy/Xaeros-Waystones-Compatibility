@@ -26,8 +26,8 @@ public class W2w2Mod
 
     private static final String PROTOCOL_VERSION = "1";
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            ResourceLocation.fromNamespaceAndPath(MODID, "main"),
+    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(new
+            ResourceLocation(MODID, "main"),
             () -> PROTOCOL_VERSION,
             PROTOCOL_VERSION::equals,
             PROTOCOL_VERSION::equals
@@ -41,7 +41,7 @@ public class W2w2Mod
 
     @SubscribeEvent
     public void onWaystoneActivated(WaystoneActivatedEvent event){
-        if (!event.getPlayer().level.isClientSide) {
+        if (!event.getPlayer().getLevel().isClientSide) {
             IWaystone waystone = event.getWaystone();
             WaystoneActivatedPacket packet = new WaystoneActivatedPacket(waystone.getPos(), waystone.getName());
             sendToClient(packet, (ServerPlayer)event.getPlayer());
