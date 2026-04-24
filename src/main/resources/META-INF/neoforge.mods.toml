@@ -1,9 +1,9 @@
 modLoader="javafml"
-loaderVersion="[4,)"
+loaderVersion="[2,)"
 license="All rights reserved"
 
 [[mods]]
-modId="w2w2"
+modId="${mod_id}"
 version="${mod_version}"
 displayName="Waystones2Waypoints2"
 authors="Love, Cheese and small house plants"
@@ -12,33 +12,26 @@ description="Creates a Xaero's Minimap waypoint when a player activates a Waysto
 [[dependencies.w2w2]]
 modId="neoforge"
 type="required"
-versionRange="[26.1,)"
+versionRange="[21.1,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.w2w2]]
 modId="minecraft"
 type="required"
-versionRange="[26.1.2,)"
+versionRange="[1.21.1,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.w2w2]]
 modId="waystones"
 type="required"
-versionRange="[26.1,)"
+versionRange="[0,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.w2w2]]
 modId="xaerominimap"
-type="optional"
-versionRange="[0,)"
-ordering="NONE"
-side="CLIENT"
-
-[[dependencies.w2w2]]
-modId="xaeroworldmap"
 type="optional"
 versionRange="[0,)"
 ordering="NONE"

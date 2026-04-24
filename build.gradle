@@ -1,37 +1,36 @@
 plugins {
     id 'java'
-    id 'net.neoforged.moddev' version '2.0.141'
+    id 'net.neoforged.gradle.userdev' version '7.0.145'
 }
 
 version = '2.1.0'
 group = 'fr.shoqapik.w2w2'
 
 base {
-    archivesName = 'xaeros_waystones_compatibility-NeoForge-26.1.2'
+    archivesName = 'xaeros_waystones_compatibility-NeoForge-1.21.1'
 }
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(25)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
-neoForge {
-    version = '26.1.2.22-beta'
 
-    runs {
-        client {
-            client()
-        }
-        server {
-            server()
-        }
+runs {
+    configureEach {
+        systemProperty 'forge.logging.markers', 'REGISTRIES'
+        systemProperty 'forge.logging.console.level', 'debug'
+        modSource project.sourceSets.main
     }
 
-    mods {
-        w2w2 {
-            sourceSet sourceSets.main
-        }
+    client {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+    }
+
+    server {
+        systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        programArgument '--nogui'
     }
 }
 
@@ -40,17 +39,15 @@ repositories {
 }
 
 dependencies {
-    compileOnly "curse.maven:waystones-245755:7939341"
-    compileOnly "curse.maven:balm-531761:7959844"
-    compileOnly "curse.maven:shogi-1475746:7939269"
-    // Xaero's Minimap — solo necesario para compilar, World Map no se usa en el código
-    compileOnly "curse.maven:xaeros-minimap-263420:7971263"
-    // shogi-api embebido en shogi
-    compileOnly fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "net.neoforged:neoforge:21.1.86"
+    compileOnly "curse.maven:waystones-245755:5841748"
+    compileOnly "curse.maven:balm-531761:5798246"
+    // Xaero's Minimap 1.21.1 — sustituye el file ID con el correcto
+    compileOnly "curse.maven:xaeros-minimap-263420:7598595"
 }
 
 tasks.withType(ProcessResources).configureEach {
-    var replaceProperties = [mod_version: project.version]
+    var replaceProperties = [mod_version: project.version, mod_id: project.mod_id]
     inputs.properties replaceProperties
     filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties

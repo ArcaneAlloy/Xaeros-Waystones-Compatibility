@@ -5,12 +5,11 @@ import net.minecraft.core.BlockPos;
 import xaero.common.XaeroMinimapSession;
 import xaero.common.core.IXaeroMinimapClientPlayNetHandler;
 import xaero.common.minimap.waypoints.Waypoint;
-import xaero.hud.minimap.module.MinimapSession;
-import xaero.hud.minimap.waypoint.WaypointSession;
-import xaero.hud.minimap.waypoint.set.WaypointSet;
-import xaero.hud.minimap.world.MinimapWorldManager;
+import xaero.common.minimap.waypoints.WaypointsManager;
+import xaero.minimap.XaeroMinimap;
 
 import java.io.IOException;
+import java.util.List;
 
 public class XaeronCompatibility {
 
@@ -18,26 +17,14 @@ public class XaeronCompatibility {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.getConnection() == null) return;
 
-        // Obtener la sesión del minimapa
-        IXaeroMinimapClientPlayNetHandler netHandler =
+        IXaeroMinimapClientPlayNetHandler clientLevel =
                 (IXaeroMinimapClientPlayNetHandler) mc.player.connection;
-        XaeroMinimapSession xaeroSession = netHandler.getXaero_minimapSession();
-        if (xaeroSession == null) return;
+        XaeroMinimapSession session = clientLevel.getXaero_minimapSession();
+        WaypointsManager waypointsManager = session.getWaypointsManager();
 
-        // En 26.1.2: MinimapSession via BuiltInHudModules
-        MinimapSession minimapSession = (MinimapSession)
-                xaero.hud.minimap.BuiltInHudModules.MINIMAP.getCurrentSession();
-        if (minimapSession == null) return;
+        List<Waypoint> waypoints = waypointsManager.getWaypoints().getList();
 
-        // Obtener el WaypointSet actual via WorldManager
-        MinimapWorldManager worldManager = minimapSession.getWorldManager();
-        if (worldManager == null || worldManager.getCurrentWorld() == null) return;
-
-        WaypointSet currentSet = worldManager.getCurrentWorld().getCurrentWaypointSet();
-        if (currentSet == null) return;
-
-        // Buscar si ya existe un waypoint en esa posición
-        Waypoint existing = getWaypointAtPos(currentSet, pos);
+        Waypoint existing = getWaypointAtPos(waypoints, pos);
         if (existing != null) {
             existing.setName(name);
             existing.setSymbol(name.substring(0, 1));
@@ -49,25 +36,22 @@ public class XaeronCompatibility {
                     pos.getX(), pos.getY() + 2, pos.getZ(),
                     name, name.substring(0, 1),
                     (int) (Math.random() * 16), 0, false);
-            currentSet.add(waypoint, false);
+            waypoints.add(waypoint);
         }
 
-        // Guardar via WorldManagerIO
         try {
-            minimapSession.getWorldManagerIO().saveAllWorlds(minimapSession);
+            XaeroMinimap.instance.getSettings().saveWaypoints(waypointsManager.getCurrentWorld());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static Waypoint getWaypointAtPos(WaypointSet set, BlockPos pos) {
-        for (Object obj : set.getWaypoints()) {
-            if (obj instanceof Waypoint waypoint) {
-                if (waypoint.getX() == pos.getX()
-                        && waypoint.getY() == pos.getY() + 2
-                        && waypoint.getZ() == pos.getZ()) {
-                    return waypoint;
-                }
+    private static Waypoint getWaypointAtPos(List<Waypoint> waypoints, BlockPos pos) {
+        for (Waypoint waypoint : waypoints) {
+            if (waypoint.getX() == pos.getX()
+                    && waypoint.getY() == pos.getY() + 2
+                    && waypoint.getZ() == pos.getZ()) {
+                return waypoint;
             }
         }
         return null;

@@ -4,12 +4,12 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 
 public record WaystoneActivatedPayload(BlockPos pos, String name) implements CustomPacketPayload {
 
     public static final Type<WaystoneActivatedPayload> TYPE =
-            new Type<>(Identifier.fromNamespaceAndPath(W2w2Mod.MODID, "waystone_activated"));
+            new Type<>(ResourceLocation.fromNamespaceAndPath(W2w2Mod.MODID, "waystone_activated"));
 
     public static final StreamCodec<FriendlyByteBuf, WaystoneActivatedPayload> STREAM_CODEC =
             StreamCodec.composite(
